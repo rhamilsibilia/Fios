@@ -283,9 +283,83 @@ allowed to be here" are different questions, and only one of them matters.
 **`Valid Login ≠ Dashboard Access` observed, not asserted.** An authenticated operator holding no
 Lena permissions logged in successfully and every protected panel refused.
 
-**Economics, measured rather than inferred.** No additional vendor; **/usr/bin/bash incremental today** — no new
+**Economics, measured rather than inferred.** No additional vendor; **$0 incremental today** — no new
 SKU, contract or line item, and Customer Zero's handful of operators sits far inside the bundled
-plan tier. **It is not /usr/bin/bash forever**: per-MAU pricing across many clients' staff is a real future
+plan tier. **It is not $0 forever**: per-MAU pricing across many clients' staff is a real future
 question, deferred to the pricing work rather than waved away.
 
 Full live evidence: `Trisphere-Enterprise-Agent/docs/contracts/BROWSER-IDENTITY.md`.
+
+---
+
+## ADR-EA-025 — Wake Detection Is a Discriminative Local Model, and Its Weights Must Be Commercially Clean
+
+**Status:** Accepted · 2026-08-23 · closes deferred decision **D5**
+
+**Decision.** Lena's wake word is a **discriminative local model** — Apache-2.0 runtime code plus a
+**Trisphere-trained `Hey Lena` classifier head**. Detection runs entirely on-device with no network
+path. **No CC-BY-NC-SA weight ever ships.**
+
+**Why not the elegant option.** Grammar-constrained ASR would have served as wake word *and*
+transcriber under a single Apache-2.0 licence with no training step. It was measured and rejected:
+**30% false positives**, firing on `Hey Elena` and `Hey Lisa` — and decisively, **true and false
+wakes both scored 1.000**. A constrained decoder is forced choice, so a near-miss becomes a confident
+match. **No threshold separates them.** A confidence score that cannot discriminate is not a safety
+control; shipping one would be worse than shipping none, because it would look like a control.
+
+The discriminative model scored **0/20 false positives with +0.9946 separation** on the identical
+negatives, for **1.9% of a 4-core N95 and 196 MB**, with zero egress while idle.
+
+**Why not Porcupine.** Rejected on economics, not quality: $6,000–$30,000/yr plus a runtime AccessKey
+— the vendor dependence the pilot exists to avoid — to beat a $0 option that measured zero false
+positives. **Retained as a pre-qualified fallback adapter**, which is what the provider seam is for.
+
+**The consequential part is the licence.** openWakeWord is a **mixed repository**: Apache-2.0 code,
+**CC-BY-NC-SA-4.0 pre-trained weights**, and a feature extractor described as Google's under
+Apache-2.0 by a README that also declares *all* included pre-trained models non-commercial. Both
+statements cover the same files. **The ambiguity was escalated, not resolved by adopting the
+convenient reading** — the moment the useful interpretation wins, the licence firewall has stopped
+working.
+
+**Therefore this ADR selects an engine and deliberately does not produce a shippable artifact.** Two
+conditions gate one: a written licence determination on the feature extractor, and training the head
+on data that is not CC-BY-NC-SA — a deliberate deviation, since the upstream training path defaults
+to exactly the contaminated feature set. **Until both close, Lena has no shippable wake word**, and
+recording that is more useful than recording that an engine was chosen.
+
+`Always available ≠ always transmitting` is now enforced structurally: the detector is a local graph
+with no network path, measured at zero egress and zero marginal cost while idle.
+
+---
+
+## ADR-EA-026 — Speaker Identification Is Rejected; Speaker *Change* Detection Is Sufficient
+
+**Status:** Accepted · 2026-08-23 · closes deferred decision **D6**
+
+**Decision.** Speaker identification is **rejected for the pilot**. The architecture's only actual
+requirement is met by **in-session speaker-change detection**, which stores no voiceprint.
+
+**The insight.** Lena's architecture never asks *"who is speaking?"* The Voice Standard uses speaker
+attribution in exactly one direction — **to withhold authority, never to grant it.** A question that
+only ever needs a negative answer does not require identification:
+
+```text
+what the architecture needs    "is this the same voice that opened this session?"
+what identification provides   "which enrolled human is this?" — plus a biometric database
+```
+
+Change detection compares within the session and discards at session end. Identification would create
+a **retained biometric identifier whose output the architecture forbids acting on** — near-zero
+benefit against BIPA/CUBI exposure, consent and retention duties, a new breach surface, and poor
+accuracy on a laptop microphone in a busy office.
+
+**Closing it in this direction retires a recorded drift risk.** The register warned that *an
+unresolved question tends to resolve toward the only available implementation*. Leaving D6 open was
+itself the hazard. `Speaker Recognition ≠ Authority` is now enforced by the **absence of the
+capability**, not by restraint.
+
+Preserved as a future optional capability requiring its own authorization and a legal review.
+**Never an authenticator.**
+
+Reasoning: [[18_VOICE-PREFLIGHT-L8.2]] · Evidence:
+`Trisphere-Enterprise-Agent/docs/engineering/L8.2-VOICE-PREFLIGHT-RECORD.md`

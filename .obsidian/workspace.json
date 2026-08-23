@@ -4,11 +4,53 @@
     "type": "split",
     "children": [
       {
-        "id": "51318bc0f691ae4e",
+        "id": "8e93a2e937dfe23a",
         "type": "tabs",
         "children": [
           {
-            "id": "81a5994050a37b79",
+            "id": "45416e15e8ba4c69",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "FIOS Constitution.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "FIOS Constitution"
+            }
+          },
+          {
+            "id": "5a20a081b25957ae",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "FIOS Architecture.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "FIOS Architecture"
+            }
+          },
+          {
+            "id": "9de9dbb7b7a6fb8a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "The Librarian Charter.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "The Librarian Charter"
+            }
+          },
+          {
+            "id": "459017d7e5c210ea",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -20,8 +62,75 @@
               "icon": "lucide-file",
               "title": "Welcome"
             }
+          },
+          {
+            "id": "69750ace4498b3c1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "SR-0001 - The Founding Session.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "SR-0001 - The Founding Session"
+            }
+          },
+          {
+            "id": "53a5da1f01c0ca7a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Experience Architecture/EXPERIENCE-CHARTER.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "EXPERIENCE-CHARTER"
+            }
+          },
+          {
+            "id": "1af75dec796a6156",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Experience Architecture/EXPERIENCE-DISCOVERY.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "EXPERIENCE-DISCOVERY"
+            }
+          },
+          {
+            "id": "e384b4c015ec85cc",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Experience Architecture/STORY-ARCHITECTURE.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "STORY-ARCHITECTURE"
+            }
+          },
+          {
+            "id": "8b7c09c8fb3ed064",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
           }
-        ]
+        ],
+        "currentTab": 8
       }
     ],
     "direction": "vertical"
@@ -188,6 +297,42 @@
       "bases:Create new base": false
     }
   },
-  "active": "81a5994050a37b79",
-  "lastOpenFiles": []
+  "active": "8b7c09c8fb3ed064",
+  "lastOpenFiles": [
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/17_ARCHITECTURE-SYNC-WORKFLOW.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/17_ARCHITECTURE-SYNC-WORKFLOW.md.tmp.10100.a64c17ed78f8",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/16_LOCAL-REFLEX-TRIAGE.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/16_LOCAL-REFLEX-TRIAGE.md.tmp.10100.22cb99e9339e",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/15_PROGRESSIVE-CONTEXT-AND-CACHE-FABRIC.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/00_TRISPHERE-ENTERPRISE-AGENT.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/README.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/14_ARCHITECTURE-DECISIONS.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/13_ROADMAP.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/12_OPEN-JARVIS-INTAKE.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/11_VERTICAL-EDITIONS.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/10_TRISPHERE-NODE.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/09_DEPLOYMENT.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/08_SECURITY.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/07_DEVICE-RUNTIME.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/06_COMPANY-KNOWLEDGE.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/05_MODEL-ROUTER.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/04_CAPABILITY-RUNTIME.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/03_IDENTITY-AND-PERMISSIONS.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/02_GOVERNANCE.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent/01_ARCHITECTURE.md",
+    "FIOS/Trisphere Ventures/Architecture/Trisphere Enterprise Agent",
+    "FIOS/Trisphere Ventures/Architecture",
+    "FIOS/Trisphere Ventures",
+    "Experience Architecture/CUSTOMER-JOURNEY.md",
+    "FIOS Constitution.md",
+    "Experience Architecture",
+    "Project Delivery Framework",
+    "Experience Architecture/STORY-ARCHITECTURE.md",
+    "Experience Architecture/EXPERIENCE-DISCOVERY.md",
+    "Experience Architecture/EXPERIENCE-CHARTER.md",
+    "SR-0001 - The Founding Session.md",
+    "Project Delivery Framework/FIOS Experience Architecture Framework.md",
+    "FIOS",
+    "00 System"
+  ]
 }
