@@ -209,3 +209,45 @@ unknown` already express wake, STT, TTS, failed transcription, retry and fallbac
    around it.
 5. **Popularity was not consulted and would have chosen differently.** The elegant one-engine design
    lost to a measurement.
+
+---
+
+## Readiness closure — 2026-08-23
+
+**The preflight said the engine was chosen and no shippable artifact existed. That is now closed, and
+the way it closed is the lesson.**
+
+The openWakeWord feature-extractor licence never came clean. A reasonable reading favoured us. **We
+did not take it** — we removed the dependency instead, and built a wake model with **no third-party
+weights at all**. A mel filterbank is arithmetic, and arithmetic carries no licence. The result is
+also *twelve times cheaper* to run than the thing it replaced, which was not the goal and is worth
+noticing: refusing the shortcut produced the better engineering outcome, not merely the safer one.
+
+**The biggest risk did not materialise.** A model trained on two synthetic Windows voices detected a
+real human saying "Hey Lena" **five times out of five**, through the air, on the pilot laptop.
+
+**The second lesson is about what a confidence score is for.** The preflight found that
+grammar-constrained wake detection scored true and false wakes identically at 1.000. The closure
+found the *same* thing in the command path: every command whose verb had been destroyed still
+reported 0.90–1.00 confidence. Twice now, the number that looked like a safety control carried no
+information. **The control that works asks a different question: is this a verb Lena actually has?**
+That caught 7 of 7 corrupted verbs, with none passing silently.
+
+**The third lesson is that the live test found what no synthetic test could.** Not the wake word —
+that worked. The *microphone*. Real speech arrived at −64 dBFS at conversational distance and −34 dBFS
+close, and early runs produced **empty** transcripts purely from level. The wake model shrugged it off
+because it was trained with gain augmentation; the recogniser did not. Every threshold in the harness
+had to be recalibrated from measurement, including a barge-in threshold that had been sitting *above
+the operator's own voice* — so a genuine interruption went undetected twice before anyone knew why.
+
+**And the finding that decides readiness.** Spoken by a human: *"transfer eight hundred fifty dollars
+to the operating account"* was heard as *"that's the a hundred fifty dollars to the operating
+account"*. **A six-fold error in the amount of a money movement.** Lena refused correctly anyway,
+because the governance layer does not depend on the transcript being right. That is the architecture
+working — and it is also why Lena is **NOT READY**: an assistant that mis-hears most consequential
+commands and has to ask again every time is not something to put in front of a client, even when it
+is safe.
+
+**Both remaining blockers close with one action:** retrain on consented Trisphere staff recordings.
+That settles the training-data provenance question *and* attacks the accuracy gap, which is the kind
+of coincidence worth spending the money on.

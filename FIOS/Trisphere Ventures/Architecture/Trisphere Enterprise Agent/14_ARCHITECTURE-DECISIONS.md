@@ -363,3 +363,78 @@ Preserved as a future optional capability requiring its own authorization and a 
 
 Reasoning: [[18_VOICE-PREFLIGHT-L8.2]] · Evidence:
 `Trisphere-Enterprise-Agent/docs/engineering/L8.2-VOICE-PREFLIGHT-RECORD.md`
+
+---
+
+## ADR-EA-027 — The Wake Model Is Built In-House, Because the Licence Would Not Come Clean
+
+**Status:** Accepted · 2026-08-23 · closes the two conditions ADR-EA-025 left open
+
+**Decision.** Lena's wake word is a **Trisphere-owned model containing no third-party weights of any
+kind** — a deterministic DSP front end written from the standard definitions, plus a 54,465-parameter
+CNN trained in-house. `hey_lena` 1.0.0, sha256 `05332337ae490003…`, 218,710 bytes.
+
+**Why this rather than resolving the ambiguity.** ADR-EA-025 escalated openWakeWord's
+feature-extractor licence. More evidence narrowed the question but did not close it: the repository
+`LICENSE` is Apache-2.0 with no carve-out, the README calls the extractor Google's Apache-2.0 work,
+and the same README declares that *all* included pre-trained models are CC-BY-NC-SA. **Both
+sentences describe the same files.**
+
+A reasoned inference favouring the permissive reading was available and was **not taken**. The moment
+the useful interpretation wins, the firewall has stopped working. **So the dependency was removed
+instead of the doubt.** A mel filterbank is arithmetic; arithmetic carries no model licence.
+
+`microWakeWord` was eliminated on facts, not preference — TensorFlow has no Python 3.14 wheel, so it
+cannot run on the pilot machine, and its output targets microcontrollers.
+
+**What the evidence says.** 0.6% of one N95 core — **twelve times cheaper** than the engine it
+replaced. Zero false accepts across 25 minutes of unseen adversarial speech at the selected operating
+point. Zero false fires in 60 seconds of real room audio. And the risk that mattered most —
+**a model trained on two synthetic voices generalising to a real human — did not materialise: five
+detections in five attempts, spoken through the air.**
+
+**What is deliberately still open.** The training corpus is bundled-OS TTS output, and no written
+grant covers using it as ML training data. **Having rejected an upstream model for licence ambiguity,
+excusing our own would be incoherent.** The fix also fixes the accuracy gap: retrain on consented
+Trisphere staff recordings.
+
+**Consequence.** `Installed ≠ Qualified ≠ Activated` still holds. Lena now *has* a lawful wake model
+and is still **NOT READY** for full L8.2 — because command transcription is not accurate enough on
+real speech, not because the wake word is missing.
+
+---
+
+## ADR-EA-028 — Voice Commands Are Gated on Capability Vocabulary, Not on Recogniser Confidence
+
+**Status:** Accepted · 2026-08-23
+
+**Decision.** The command path uses local transcription plus an **escalation gate that asks whether
+the transcript contains a verb Lena actually has**. A command with no recognised action verb is
+never executed; it is escalated to a question or a read-back.
+
+**Why not confidence.** Because confidence carried no information. Across every command whose action
+verb had been destroyed by transcription, the recogniser reported **0.90 to 1.00**. This is the same
+failure that killed grammar-constrained wake detection in ADR-EA-025, now confirmed in a second
+place: **a score that cannot separate is not a control, and shipping one is worse than shipping none
+because it looks like a control.**
+
+> ### `STT Confidence ≠ Authority`
+
+**The evidence.** Of 24 commands, 7 had their action verb corrupted. The gate caught **7 of 7**.
+**Zero passed silently.** All 18 destructive commands were routed to read-back regardless.
+
+**Pre-roll is a safety mechanism, not an optimisation.** Retaining 500 ms of audio from *before* the
+detector fires recovered the action verb from 0/14 to 10/14 (and 3/14 to 14/14 on the stronger
+engine) — and eliminated every **negation flip**. Without it, *"do not send the invoice"* became
+*"send the invoice"* twice per language. The negation word is the first word, so the token most
+likely to be clipped is the token that inverts the instruction.
+
+**Live confirmation, and it is sobering.** Spoken to the pilot laptop by a human:
+*"transfer eight hundred fifty dollars to the operating account"* was heard as *"that's the a hundred
+fifty dollars to the operating account"* — **verb destroyed and a six-fold amount error**. The
+runtime still refused correctly and demanded read-back and approval. **The governance layer held on a
+wrong transcript**, which is the entire argument for why read-back is architectural rather than a
+prompt instruction.
+
+Reasoning: [[18_VOICE-PREFLIGHT-L8.2]] · Evidence:
+`Trisphere-Enterprise-Agent/docs/engineering/L8.2-VOICE-PREFLIGHT-RECORD.md` Part 2
