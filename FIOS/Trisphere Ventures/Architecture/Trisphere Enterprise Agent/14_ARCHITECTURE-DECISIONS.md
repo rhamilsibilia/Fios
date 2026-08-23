@@ -268,3 +268,24 @@ and the factor kinds exist, so the model is ready — a deployment needing phish
 now would need a different adapter.
 
 Engineering contract: `Trisphere-Enterprise-Agent/docs/contracts/BROWSER-IDENTITY.md`.
+
+### ADR-EA-024 — addendum: proven live, 2026-08-23
+
+The decision is no longer only architectural. The Supabase adapter is implemented and the whole
+chain was driven **in a real browser against Familia Business Formation — Staging**: real login,
+real verified identity, real Lena session, real dashboard with real evidence.
+
+**The finding that justifies the design.** A **deleted user's still-valid signed JWT stops
+authenticating immediately**, because the adapter asks Supabase rather than decoding the token
+locally. A locally-decoded JWT would have sailed straight through — "valid signature" and "still
+allowed to be here" are different questions, and only one of them matters.
+
+**`Valid Login ≠ Dashboard Access` observed, not asserted.** An authenticated operator holding no
+Lena permissions logged in successfully and every protected panel refused.
+
+**Economics, measured rather than inferred.** No additional vendor; **/usr/bin/bash incremental today** — no new
+SKU, contract or line item, and Customer Zero's handful of operators sits far inside the bundled
+plan tier. **It is not /usr/bin/bash forever**: per-MAU pricing across many clients' staff is a real future
+question, deferred to the pricing work rather than waved away.
+
+Full live evidence: `Trisphere-Enterprise-Agent/docs/contracts/BROWSER-IDENTITY.md`.
