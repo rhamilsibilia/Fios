@@ -223,3 +223,48 @@ disposition and a transformation classification, and is registered in both the F
 versioned engineering repository before the study is considered complete.
 
 Model weights are licence-checked **separately from code**.
+
+---
+
+## ADR-EA-024 — Browser Identity: Provider-Neutral Core, Supabase Auth for Customer Zero
+
+**Status:** Accepted · 2026-08-23 · Register: **D27**
+
+Lena's operator dashboard had no way for a human to reach it. This decides how a browser proves a
+Principal — and nothing else.
+
+```text
+AUTHENTICATION ≠ AUTHORIZATION
+Identity Provider Role ≠ Lena Effective Authority
+Valid Login ≠ Dashboard Access
+```
+
+**Discovery changed the answer.** Lena already has durable sessions — open, check, refresh, revoke,
+idle and absolute expiry, device-bound per D3. The gap was never "sessions"; it was how a browser
+proves a Principal. And Supabase Auth is **already live** on the same Staging project Lena already
+uses as its durable store.
+
+**Decision.** Core stays provider-neutral behind an `IdentityProvider` port. Customer Zero uses
+Supabase Auth: no new vendor, no new invoice, no new data-processor relationship, no additional cost,
+and the user table stays in the client's own Postgres.
+
+**Alternatives.** Logto remains ASSESS — a completeness checklist, not a dependency, per the
+standing Identity Blueprint decision. Auth0/Clerk/WorkOS rejected for Customer Zero as new vendors
+solving a problem owned infrastructure already solves; they stay cheap adapter choices later.
+Proprietary password authentication: refused.
+
+**The boundary is structural, not documentary.** `VerifiedIdentity` has no field for a role,
+permission, scope, group, entitlement, clearance, office or capability — a provider asserting
+`roles: ["admin"]` finds nowhere to put it. Same discipline as `OverrideGrant` in ADR-EA-022.
+
+**An unmapped subject is refused, never auto-provisioned.** Creating a Principal on first login would
+let the identity provider decide who exists inside Lena, which is the whole boundary.
+
+**Customer Zero ≠ Core.** The same Core must serve a client on Entra ID, Okta or Google Workspace
+with a second adapter and no source fork.
+
+**Open risk:** passkeys/WebAuthn are not first-class in the chosen provider today. The `aal3` tier
+and the factor kinds exist, so the model is ready — a deployment needing phishing-resistant step-up
+now would need a different adapter.
+
+Engineering contract: `Trisphere-Enterprise-Agent/docs/contracts/BROWSER-IDENTITY.md`.
