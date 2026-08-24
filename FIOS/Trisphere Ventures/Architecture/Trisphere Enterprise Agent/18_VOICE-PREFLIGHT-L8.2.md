@@ -435,3 +435,44 @@ gets an external-microphone recommendation *for this machine*. The no-special-ha
 **not** abandoned, because no second machine has been measured and the pipeline that failed here is
 now demonstrably correct rather than suspect. The cheapest next experiment is to run the identical
 protocol somewhere else; if the token accuracy jumps, the promise survives everywhere but here.
+
+---
+
+## The control that did not exist — 2026-08-24
+
+**Part 6 ended with a USB recommendation. That was one claim too many.** The evidence proved this
+laptop's built-in path is degraded; it never proved an external microphone fixes it. The correction
+was right, and the gate that would have settled it **could not be run at all.**
+
+The zero-cost candidate turned out to have no microphone: the USB camera is a composite device with a
+single interface, video only, and the machine has **no USB audio device of any kind**. The only other
+capture endpoint is a Bluetooth headset, and when it was connected it enumerated on all four Windows
+audio APIs and delivered **absolute digital silence — one distinct sample value — on every one of
+them, at every rate.** An endpoint exists. A working microphone does not.
+
+**So the honest verdict is NOT CONFIRMED, not "confirmed by absence".** The instruction anticipated
+the case where the control performs badly and said: do not blame both microphones, reopen the
+upstream path. That branch was never reached, because a device producing one distinct value is not a
+poorly-performing microphone — **it is an absent measurement.** Whether the fault lies in this
+laptop's microphone or somewhere upstream of it cannot be decided on a machine with exactly one
+working capture device, because a single-device comparison is not a comparison.
+
+**Two things went wrong on my side and both are worth keeping.**
+
+The first comparison recorded **both microphones simultaneously**, which is genuinely better science —
+identical acoustic event, no drift possible, half the operator's effort. It also broke the
+measurement: opening a Bluetooth Hands-Free stream puts Windows into communications mode, and the
+laptop microphone collapsed to two decibels of dynamic range. **A paired design is worthless when the
+pairing perturbs the thing being paired.** The elegant experiment was the wrong experiment.
+
+And the built-in microphone then measured progressively worse than its own earlier baseline while the
+headset stayed attached — eleven decibels of dynamic range, then seven, then two. The endpoint never
+released, so it was **never re-measured clean**. Every number from that session is confounded and
+**none of it supersedes the earlier baseline**; the thirty-one percent figure stands. Recording that
+the later, worse numbers are unusable matters more than recording the numbers.
+
+**The closing experiment costs nothing:** run the committed protocol on any second machine that
+already exists. If accuracy jumps, this laptop is the outlier and the no-special-hardware promise
+survives everywhere else. If it does not, the cause is upstream of the microphone and the capture
+path reopens rather than the hardware being blamed. **Nothing should be purchased on the strength of
+this record.**
