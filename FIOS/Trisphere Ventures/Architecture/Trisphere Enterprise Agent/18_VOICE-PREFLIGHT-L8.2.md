@@ -251,3 +251,53 @@ is safe.
 **Both remaining blockers close with one action:** retrain on consented Trisphere staff recordings.
 That settles the training-data provenance question *and* attacks the accuracy gap, which is the kind
 of coincidence worth spending the money on.
+
+---
+
+## Voice quality gate — 2026-08-23
+
+**Three lessons, and two of them are about not believing your own earlier evidence.**
+
+**The wake model failed on real human speech — 0 out of 10.** Part 2 recorded five live detections
+in five attempts and treated that as evidence of general capability. It was not. Those five were
+spoken deliberately, close to the microphone, one at a time; the corpus covers varied manner,
+distance and level, and the model detected none of it while happily waking to "Hello Lena" and
+"Lena will be back Monday". **A small favourable sample is not a capability claim**, and it took a
+proper corpus to show it. The result was verified two independent ways before it was believed.
+
+**Retraining on consented data fixed detection and broke everything else.** v2 and v3 both reach
+10/10, and both wake to "Hey Elena", "Hey Lisa" and "Hey Layla" — the exact phrases that
+disqualified grammar-constrained keyword spotting in the preflight. Seven human positives
+oversampled 180–260× teaches "a human voice → fire", and rebalancing the negatives did not rescue it
+because **augmentation cannot invent phonetic diversity that is not in the data.** The corpus
+specification had already said a retrain needs five or more speakers; the evidence simply confirmed
+its own prediction. **No model was promoted.** Picking a winner would have meant shipping a wake word
+that answers to a colleague named Elena.
+
+**The recogniser benchmark was voided by its own control, and that is the most useful thing in this
+increment.** Three recognisers — including one several times larger — all scored zero action verbs
+with word error rates above 100%. Three engines failing identically is not three engines failing.
+The control took one minute: the same engine, the same session, transcribed known-good synthetic
+audio perfectly and the human recording of the same sentence as **"only"**. **The microphone was
+broken, not the models.** Publishing "whisper-medium achieves 18.8%" would have been a false claim
+about a vendor's product, derived from our own faulty capture path, and it would have been very hard
+to retract later.
+
+**So the binding blocker moved, and got cheaper.** It is no longer "which speech recogniser should
+Lena use" — a research question with a licensing tail — but "the built-in laptop microphone drops to
+digital silence mid-sentence and swings seventy decibels between identical prompts". That is a
+twenty-dollar headset, and it gates every recognition number we would otherwise have spent weeks
+arguing about. It also contradicts the pilot's stated goal of requiring no special audio hardware,
+which is worth saying plainly rather than engineering around.
+
+**One thing did close cleanly.** Lena's voice was chosen by a human listening to real Lena lines:
+**Helena**, over Nadine, on identical English and Spanish passages including a money-movement
+read-back. `Lena Voice Identity ≠ TTS Provider` holds — Helena is an adapter choice behind
+`SpeechSynthesisProvider`, and a later swap is deployment configuration, not a code change. Local
+Piper is now explicitly the **offline fallback**, not Lena's normal voice; the founder heard the
+difference unprompted and asked which one was which, which is about as direct a naturalness result
+as this gate could produce.
+
+**Consent was built before capture, not reconstructed after.** Benchmarking permission and
+model-training permission are asked separately and enforced in code, because deleting a recording
+does not unlearn it.
