@@ -347,3 +347,49 @@ second look.
 **Nothing about the system settings was changed.** Disabling audio enhancements on the endpoint is
 the highest-value remaining experiment and it belongs to the operator, not to the agent that
 diagnosed it.
+
+---
+
+## Audio pipeline correction — 2026-08-24
+
+**The pipeline is fixed and proven. The microphone still cannot be relied on, and the reason is
+specific to this laptop rather than to Lena.**
+
+Three corrections, each demonstrated rather than asserted. Audio stays **float32** until the
+provider boundary — on identical samples a naive cast produces 100% zeros while the normalised
+conversion produces 13.4% on real speech, which is the entire original misdiagnosis in one line.
+Capture health became **three states** instead of two, and a unit test now proves a quiet room reads
+`GATE_CLOSED` with the stream alive while a genuinely closed stream reads `STREAM_DEAD` **on the
+same samples** — the old binary logic could not separate those, which is exactly why its liveness
+check never fired when it mattered. And capture became **gate-aware**: a continuously-filled
+pre-roll ring, onset decided against an adaptive floor measured in float, and an ending bounded by
+silence rather than a timer. It captured cleanly end to end at −29 dBFS with 9503 distinct values.
+
+**The sixty-second human gate still did not pass** — zero seconds of signal in sixty, with zero
+stream deaths and zero liveness failures. The pipeline behaved correctly and had almost nothing to
+capture. Across arm's length, thirty centimetres and fifteen, at normal and raised volume, the gate
+opened for one second out of thirty-two.
+
+**What settled the attribution was the one check that shares none of our code:** Windows' own input
+meter moves when the operator speaks. The hardware is fine. This machine's DSP simply demands far
+more acoustic energy than ordinary conversation delivers, and that is a property of the laptop's
+audio tuning, not of Lena. It is recorded as a **hardware-specific limitation**, with a USB headset
+**recommended for this machine** — deliberately not promoted to a universal requirement, because
+neither another machine nor this one with enhancements disabled has been measured. The operator
+chose not to disable enhancements this round, so that question is **not tested**, not answered.
+
+**The methodological lesson outranks the audio result.** The same hypothesis — that requesting a
+non-native sample rate was destroying the signal — was raised, refuted, resurrected on new evidence,
+and refuted again. The first refutation was itself worthless: it re-measured in a silent room, where
+both configurations correctly report the noise floor and look identical. **It compared nothing
+against nothing and called that a result.** Only a paired, interleaved test taken during continuous
+speech separated a real configuration difference from a gate opening and closing on its own
+schedule — and that test showed the supposedly broken configuration performing better.
+
+So the standing rule now has a corollary. Instrumentation integrity must be proven before blaming
+the product, the model, the provider or the hardware — **and a comparison run against silence proves
+nothing about either side of it.**
+
+The earlier wrong conclusions are kept and marked superseded. The sequence — dead stream, then
+sample-rate fault, then sample-rate fault again — is the useful record. Each was plausible, each was
+measured, and each was wrong for a different reason.
