@@ -301,3 +301,49 @@ as this gate could produce.
 **Consent was built before capture, not reconstructed after.** Benchmarking permission and
 model-training permission are asked separately and enforced in code, because deleting a recording
 does not unlearn it.
+
+---
+
+## Audio capture root cause — 2026-08-23. A correction.
+
+**The previous entry recommended a USB microphone on the strength of "exact digital silence" in the
+recordings. That recommendation was wrong, and the mistake is worth more than the finding.**
+
+The audio was around −96.7 dBFS. **−96.7 dBFS quantises to exactly zero in 16-bit.** Our own save
+routine created the zeros; we then read them back, called them a dead stream, and concluded the
+hardware had failed. One instrumented run ended it: `stream active=True, zero-blocks=0/114`. The
+stream had been alive and delivering non-zero float data the entire time.
+
+**The microphone is healthy.** Three hundred seconds of continuous capture, zero dropouts, zero
+device changes, no other application holding the device, and the Bluetooth headset endpoint
+unplugged throughout. Speech reaches −34 dBFS with roughly thirteen hundred distinct values, which
+is clean, usable audio.
+
+**What is actually happening is a noise gate, and an unusually violent one.** In a silent room the
+Intel DSP emits **three distinct sample values across eight seconds**. No analogue front end does
+that; only software does. The gate slams shut between utterances instead of settling to a noise
+floor, so a nine-second window holding a four-word command contains two seconds of speech and seven
+of exact zeros. It is working precisely as designed — and **working correctly is not the same as
+being suitable.**
+
+**Three lessons, and the middle one is the expensive one.**
+
+*Measure in the domain where the signal lives.* Every level check in this milestone ran on 16-bit
+files after a lossy conversion. The conversion was the defect. Had one measurement been taken in
+float before the cast, the wrong diagnosis would never have been written down.
+
+*A smoking gun that does not survive a repeat is not evidence.* Mid-investigation a probe showed the
+native sample rate producing 1507 distinct values against 3 for the requested rate — a decisive
+sample-rate fault, apparently. Re-measured simultaneously, both read −96.7 dBFS with 3 values. The
+probes had been taken minutes apart in a room whose sound had changed. It was written up as a
+finding before it was re-run, and re-running it is what saved the conclusion.
+
+*The cheap wrong answer was available and was nearly taken.* "Buy a USB microphone" explains the
+symptom, costs little, and would have quietly become a permanent product requirement — a pilot that
+promised no special audio hardware, abandoning that promise because of an integer conversion. The
+instruction not to declare hardware failure from a single capture implementation is what forced the
+second look.
+
+**Nothing about the system settings was changed.** Disabling audio enhancements on the endpoint is
+the highest-value remaining experiment and it belongs to the operator, not to the agent that
+diagnosed it.
