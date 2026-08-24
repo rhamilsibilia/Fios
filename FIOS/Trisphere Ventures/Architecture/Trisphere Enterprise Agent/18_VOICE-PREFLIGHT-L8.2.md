@@ -476,3 +476,47 @@ already exists. If accuracy jumps, this laptop is the outlier and the no-special
 survives everywhere else. If it does not, the cause is upstream of the microphone and the capture
 path reopens rather than the hardware being blamed. **Nothing should be purchased on the strength of
 this record.**
+
+---
+
+## L8.2 held — 2026-08-24
+
+**The gate stopped correctly and the work is on hold.** No further audio-model experimentation until
+an independent microphone or a second machine exists. What matters now is that the resumption
+conditions are written down while the reasoning is fresh, so that none of it gets re-derived,
+re-argued, or quietly loosened by whoever picks this up.
+
+**The degraded baseline is preserved as a number, not an impression:** enhancements off, a −24.9 dBFS
+noise floor, roughly four decibels of signal above it, and thirty-one percent business-critical slot
+accuracy with the verb lost in all three commands, an amount wrong by a factor of six, and a negation
+lost. The lower figures from the control gate were taken with a Bluetooth endpoint attached that
+never released; they are confounded and supersede nothing.
+
+**Everything but the endpoint stays fixed on resumption** — same pipeline, same recogniser, same
+room, same speaker, same commands, same scoring, and no denoising. The temptation will be to improve
+the pipeline first, and it must be resisted: a changed pipeline makes the new endpoint incomparable
+with the held baseline, which defeats the entire purpose of having held one.
+
+**The decision rule is committed before the data exists.** A substantial, repeatable improvement
+classifies this laptop as a hardware-specific degraded endpoint and closes the blocker on the
+qualified path only. Similar poor performance means the upstream causal path reopens rather than both
+microphones being blamed. Writing the rule now is what stops a single favourable sample from
+qualifying an endpoint later.
+
+**And STT qualification now requires multiple speakers, because we have already seen what one
+produces.** Retraining the wake model on a single consenting voice took detection from zero out of
+ten to ten out of ten *and* taught it to answer to "Hey Elena", "Hey Lisa" and "Hey Layla". The same
+trap is fully available to recogniser qualification. The corpus must carry English, Spanish,
+code-switching, natural accent and pronunciation variation, speed, volume, names, amounts, dates,
+negation and consequential commands — and must report **worst-case** accuracy alongside the mean,
+because a mean hides the one speaker Lena fails for, and that speaker is a real member of staff who
+will simply stop using her.
+
+**One boundary is not negotiable and is written into the corpus specification, not left to judgement:
+do not infer demographic identity from speech.** The corpus measures whether Lena hears the words.
+No classification, no inference, no voiceprint — D6 stays closed. Accent variation is in scope
+because it affects recognition, and for no other reason. Consent is unchanged and not broadened.
+
+**Recorded so it cannot drift:** the agent is Lena. The selected premium voice is a provider asset
+realising `Lena Voice Identity v1.0 — The Executive Leader`. Local Piper remains the offline fallback.
+There is no second agent identity.
