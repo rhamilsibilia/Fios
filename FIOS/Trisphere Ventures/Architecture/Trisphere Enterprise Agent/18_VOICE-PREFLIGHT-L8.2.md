@@ -393,3 +393,45 @@ nothing about either side of it.**
 The earlier wrong conclusions are kept and marked superseded. The sequence — dead stream, then
 sample-rate fault, then sample-rate fault again — is the useful record. Each was plausible, each was
 measured, and each was wrong for a different reason.
+
+---
+
+## The gate was a Windows checkbox — 2026-08-24
+
+**Every gating behaviour recorded across five parts of this investigation was the Windows Audio
+Enhancements setting, which had been ON by default the whole time.**
+
+Turning it off removed the gate outright. Silence went from −96.7 dBFS with **three** distinct sample
+values and 77% exact zeros, to −24.9 dBFS with **ten thousand six hundred** distinct values and no
+zeros at all. The failed sixty-second gate, the distance envelope that opened one second in
+thirty-two, the "exact digital silence" that started the whole misdiagnosis — all one checkbox.
+
+**And the gate was hiding the real problem.** Underneath it the microphone delivers about **four
+decibels of signal above its own noise**, where normal capture sits at twenty to forty. Speech is
+finally captured — a twenty-five second read came back correctly as *"testing testing one two
+three"*, the first correct transcript this microphone has produced in the entire milestone — but
+business commands still fail badly. Four of thirteen critical tokens survived. *"Transfer eight
+hundred fifty dollars"* became *"trains were a hundred and fifty dollars"*: the verb destroyed and a
+six-fold error in the amount. *"Do not send the invoice to Martinez"* became *"the next in the voice
+to my teenage kids"*, losing the negation entirely.
+
+**Two mitigations were tried and both were insufficient, one instructively so.** Spectral subtraction
+raised the signal-to-noise ratio by fourteen decibels and made the transcript *worse* — the
+artifacts it introduces are harder for a recogniser than the noise it removes. **A mitigation that
+improves the metric and worsens the outcome is not a mitigation**, and this is the third time in this
+milestone that an attractive number turned out to carry no information, after the wake-word
+confidence score and the recogniser confidence score. The pattern is worth naming: *whenever a number
+improves and the thing it supposedly measures does not, believe the thing.*
+
+**A genuine defect in our own pipeline surfaced on the way.** The speech-onset threshold was a fixed
+twelve decibels above the noise floor — trivially cleared while the gate parked that floor at −96
+dBFS, and *mathematically unreachable* once the floor rose to −25 dBFS with speech at −21. Every
+utterance was reported as a closed gate. It is now proportional to the available headroom. Fixing it
+was necessary and nowhere near sufficient.
+
+**So the conclusion is narrow and deliberately so.** This laptop is a **hardware-specific degraded
+voice endpoint** — a noisy analogue front end whose deficiency was masked by an aggressive gate. Lena
+gets an external-microphone recommendation *for this machine*. The no-special-hardware promise is
+**not** abandoned, because no second machine has been measured and the pipeline that failed here is
+now demonstrably correct rather than suspect. The cheapest next experiment is to run the identical
+protocol somewhere else; if the token accuracy jumps, the promise survives everywhere but here.
